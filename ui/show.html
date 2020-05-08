@@ -1,0 +1,232 @@
+<script type="text/javascript">
+	var maxVotes = parseInt("{{ @election.votes }}");
+	var maxPerChoice = parseInt("{{ @election.votesPerChoice }}");
+	var url = '{{ @BASE }}/election/{{ @election.electionID }}';
+
+	var messages = {
+		no_votes:		'Sie haben keine Stimmen vergeben! Sie enthalten sich dadurch aktiv ihrer Stimme!',
+		not_all_votes:	'Sie haben weniger Stimmen vergeben als m&ouml;glich. &Uuml;berz&auml;hlige Stimmen werden als Enthaltungen gewertet!',
+		too_many_votes:	'Sie haben mehr Stimmen vergeben als erlaubt sind. Ihr Stimmzettel wird dadurch ung&uuml;ltig!',
+		invalid_values:	'Sie haben Werte verwendet, die nicht ganzen Zahlen entsprechen, oder kleiner als Null sind. Ihr Stimmzettel wird dadurch ung&uuml;ltig!',
+		invalid_max:	'Sie haben einer Wahloption mehr Stimmen zugewiesen als maximal erlaubt. Ihr Stimmzettel wird dadurch ung&uuml;ltig!',
+	}
+
+	// clone, stop, publish, close, cancel
+	function button(action) {
+		$('form#action').attr('action', url + '/' + action).submit();
+	}
+
+	$(document).ready(function() {
+		$('#confirmation').hide();
+		$('#addElector').hide();
+	});
+
+	function hasInvalidInput() {
+		$('input.votes').each(function(index, element) {
+			if(element.value && !element.value.match(/^\d+$/)) {
+				return true;
+			}
+		});
+
+		return false;
+	}
+
+	function getCurrentVoteCount() {
+		var votes = 0;
+
+		$('input.votes').each(function(index, element) {
+			if(element.value && element.value.match(/^\d+$/)) {
+				votes += parseInt(element.value);
+			}
+		});
+
+		return votes;
+	}
+
+	function getMaxVoteCount() {
+		var maxVotes = 0;
+		var votes = 0;
+
+		$('input.votes').each(function(index, element) {
+			if(element.value && element.value.match(/^\d+$/)) {
+				votes = parseInt(element.value);
+
+				if(votes > maxVotes) {
+					maxVotes = votes;
+				}
+			}
+		});
+
+		return maxVotes;
+	}
+
+	function updateCurrentVoteCountDisplay() {
+		$('#count').html("" + (maxVotes - getCurrentVoteCount()));
+		$('#confirmation').hide();
+		$('#govote').show();
+	}
+
+	function vote(sure) {
+		var votes = getCurrentVoteCount();
+		var error = false;
+
+		if(hasInvalidInput()) {
+			error = 'invalid_values';
+		}
+		else if(votes == 0) {
+			error = 'no_votes';
+		}
+		/*
+		else if(maxPerChoice > 0 && getMaxVoteCount() > maxPerChoice) {
+			error = 'invalid_max';
+		}
+		*/
+		else if(votes > maxVotes) {
+			error = 'too_many_votes';
+		}
+		else if(votes < maxVotes) {
+			error = 'not_all_votes';
+		}
+		else {
+			sure = true;
+		}
+
+		if(error) {
+			$('#error_message').html(messages[error]);
+			$('#confirmation').show();
+			$('#govote').hide();
+		}
+
+		if(sure) {
+			button('vote');
+		}
+	}
+</script>
+
+<check if="{{ @saved }}">
+	<check if="{{ @saved == 1 }}">
+	<h2 class="success">W&auml;hler nachtr&auml;glich hinzugef&uuml;gt!</h2>
+	<hr/>
+	</check>
+	<check if="{{ @saved == 2 }}">
+	<h2 class="success">W&auml;hler ist bereits wahlberechtigt!</h2>
+	<hr/>
+	</check>
+	<check if="{{ @saved == -1 }}">
+	<h2 class="success">W&auml;hler nicht gefunden!</h2>
+	<hr/>
+	</check>
+</check>
+
+<h1>{{ @election.title }}</h1>
+<h2>{{ @election.stateName }}!</h2>
+<p>{{ @election.info }}</p>
+<p><strong>Aktuelle Uhrzeit:</strong> {{ @election.currentDateFormatted }}</p>
+<p><strong>Startet<check if="{{ @canSeeResults }}">e</check> am:</strong> {{ @election.startDateFormatted }}</p>
+<p><strong>Endet<check if="{{ @canSeeResults }}">e</check> am:</strong> {{ @election.endDateFormatted }}</p>
+<p>
+	<span>Stimmen zu vergeben:</span>
+	<strong>
+		<span id="count">{{ @election.votes }}</span>
+		<check if="{{ @canVote }}">von {{ @election.votes }}</check>
+	</strong>
+	<exclude>
+	<check if="{{ @election.votesPerChoice > 0 }}">
+	<br/>
+	<span>Maximale Stimmen pro Wahloption:</span>
+	<strong>
+		<span id="maxVotesPerChoice">{{ @election.votesPerChoice }}</span>
+	</strong>
+	</check>
+	</exclude>
+</p>
+<check if="{{ @elector }}">
+	<true>
+		<check if="{{ @elector.voteDate }}">
+			<true>
+				<h2>Sie haben gew&auml;hlt!</h2>
+				<span>Und zwar am {{ @elector.voteDateFormatted }}.</span>
+				<check if="{{ @elector.votes===null }}">
+					<true>Ihr Stimmzettel war ung&uuml;ltig.</true>
+					<false>Sie haben {{ @elector.votes }} Stimme<check if="{{ @elector.votes!=1 }}">n</check> abgegeben.</false>
+				</check>
+				<span>Gut gemacht!</span>
+				<exclude>
+					<p>Ihr geheimer Wahl-Code lautet: {{ @elector.secretCode }}</p>
+				</exclude>
+			</true>
+			<false>
+				<h2>
+				<check if="{{ @isUpcoming }}">
+					<true>Sie werden w&auml;hlen k&ouml;nnen.</true>
+					<false>Sie haben <check if="{{ @isOver }}"><false>noch </false></check>nicht gew&auml;hlt.</false>
+				</check>
+				</h2>
+			</false>
+		</check>
+	</true>
+	<false>
+		<h2>Sie <check if="{{ @isOver }}"><true>waren</true><false>sind</false></check> nicht berechtigt zu w&auml;hlen.</h2>
+	</false>
+</check>
+<form id="action" method="POST" action="{{ @BASE }}/election/{{ @election.electionID }}/vote">
+	<h2>Wahl<check if="{{ @canSeeResults }}"><true>ergebnis</true><false>optionen</false></check></h2>
+	<check if="{{ @election.choices }}">
+		<true>
+			<repeat group="{{ @election.choices }}" value="{{ @choice }}">
+				<check if="{{ @canVote }}">
+					<input type="text" name="choice_{{ @choice.choiceID }}" class="votes" onkeyup="updateCurrentVoteCountDisplay();" value="0"/>
+				</check>
+				<check if="{{ @canSeeResults }}">
+					<span>{{ @votes['choices'][@choice.choiceID]['sum'] }} Stimme<check if="{{ @votes['choices'][@choice.choiceID]['sum']!=1 }}">n</check> ({{ @votes['choices'][@choice.choiceID]['perc'] }}%) f&uuml;r</span>
+				</check>
+				<label style="color:{{ @choice.color }};">{{ @choice.title }}</label>
+				<br/>
+			</repeat>
+		</true>
+		<false><p>Keine</p></false>
+	</check>
+</form>
+<hr/>
+<check if="{{ @canVote }}">
+	<div id="confirmation">
+		<h2 id="error_message">Ich zeige Fehlermeldungen an :)</h2>
+		<button onclick="vote(true);">Ich wei&szlig; was ich tue!</button>
+	</div>
+	<div id="govote">
+		<button onclick="vote();">Stimmzettel abgeben</button>
+	</div>
+</check>
+<check if="{{ @canSeeResults }}">
+	<span>{{ @votes.invalids }}</span>
+	<label>Stimmzettel war<check if="{{ @votes.invalids!=1 }}">en</check> ung&uuml;ltig</label>
+	<br/>
+	<span>{{ @votes.abstentions }}</span>
+	<label>Stimmenthaltung<check if="{{ @votes.abstentions!=1 }}">en</check></label>
+	<br/>
+	</check>
+	<span>{{ @votes.voted }}/{{ @votes.voters }} ({{ @votes.perc }}%)</span>
+	<label>Wahlbeteiligung</label>
+</check>
+<check if="{{ @prelim }}">
+	<p>Derzeitige Wahlbeteiligung: {{ @prelim.votes }}/{{ @prelim.electors }} ({{ @prelim.perc }}%)</p>
+</check>
+<check if="{{ @user.isAdmin }}">
+	<hr/>
+	<button onclick="button('clone');">Wahl klonen</button>
+	<check if="{{ @election.canEdit }}">
+		<check if="{{ @canRemove }}"><button onclick="button('remove');">Wahl l&ouml;schen</button></check>
+		<check if="{{ @canStop }}"><button onclick="button('stop');">Wahl stoppen</button></check>
+		<check if="{{ @canPublish }}"><button onclick="button('publish');">Ver&ouml;ffentlichen</button></check>
+		<check if="{{ @canClose }}"><button onclick="button('close');">Vorzeitig Beenden</button></check>
+		<check if="{{ @canCancel }}"><button onclick="button('cancel');">Wahl abbrechen</button></check>
+		<check if="{{ @canAddElector }}"><button onclick="$('#addElector').show();">W&auml;hler hinzuf&uuml;gen</button></check>
+	</check>
+	<hr/>
+	<div id="addElector">
+		<form method="POST" action="{{ @BASE }}/election/{{ @election.electionID }}/add" onsubmit="return confirm('Sind Sie sicher? Dies kann nicht r&uuml;ckg&auml;ngig gemacht werden!');">
+			<input type="text" name="name"/>
+			<button>Jetzt hinzuf&uuml;gen!</button>
+		</form>
+	</div>
+</check>

@@ -1,0 +1,99 @@
+<script type="text/javascript">
+	// start, cancel, clone, edit
+	function button(action) {
+		$('#edit').attr({action: '{{ @BASE }}/election/{{ @election.electionID }}/' + action}).submit();
+	}
+	
+	function addGroup() {
+		$.getJSON('{{ @BASE }}/resource/group/' + $('#group').val() + '/memberNames', {},
+			function(data) {
+				$('#electors').val(data.join("\n") + "\n" + $('#electors').val());
+			});
+	}
+	
+	$(document).ready(function() {
+		$('#history').toggle();
+	});
+</script>
+
+<check if="{{ @saved }}">
+	<h2 class="success">Daten gespeichert!</h2>
+	<hr/>
+</check>
+
+<h1>Wahl bearbeiten</h1>
+<p>Folgendes muss gegeben sein, um eine Wahl starten zu können:</p>
+<ul>
+	<li>Es muss mindestens eine Wahloption geben</li>
+	<li>Es muss mindestens einen W&auml;hler geben</li>
+	<li>Das Startdatum muss in der Zukunft liegen</li>
+	<li>Das Enddatum muss in der Zukunft liegen und zwar nach dem Startdatum</li>
+</ul>
+<p>Achtung: Unbekannte W&auml;hlernamen werden beim Speichern automatisch entfernt!</p>
+<form id="edit" method="POST" action="{{ @BASE }}/election/{{ @election.electionID }}/edit">
+	<h2>Titel</h2>
+	<input type="text" name="title" id="title" value="{{ @election.title }}"/>
+	<h2>Wahlinformation</h2>
+	<p>Zus&auml;tzliche Informationen die zur Wahl angezeigt werden.</p>
+	<textarea name="info" id="info">{{ @election.info }}</textarea>
+	<h2>Daten</h2>
+	<input type="text" name="startDate" id="startDate" value="{{ @election.startDateFormatted }}"/>
+	<label for="startDate">Started am <span>(Format: YYYY-MM-DD HH:MM)</span></label>
+	<br/>
+	<input type="text" name="endDate" id="endDate" value="{{ @election.endDateFormatted }}"/>
+	<label for="endDate">Endet am <span>(Format: YYYY-MM-DD HH:MM)</span></label>
+	<br/>
+	<br/>
+	<input type="text" name="votes" id="votes" value="{{ @election.votes }}"/>
+	<label for="votes">Maximale Anzahl an Stimmen pro W&auml;hler</label>
+	<br/>
+	
+	<h2>Wahloptionen</h2>
+	<p>Eine Option pro Zeile, Dopplungen werden beim Abspeichern entfernt!</p>
+	<p>Jeder Option kann getrennt durch einen Doppelpunkt (:) eine
+		<a href="http://www.w3schools.com/cssref/css_colornames.asp" target="_blank">Farbe</a> zugewiesen werden.</p>
+	<textarea name="choices" id="choices">{{ @choicesString }}</textarea>
+	
+	<br/>
+	<br/>
+	
+	<h2>W&auml;hler</h2>
+	<p>Ein Wähler pro Zeile, Dopplungen und unbekannte Namen werden beim abspeichern entfernt!</p>
+	<textarea name="electors" id="electors">{{ @electorsString }}</textarea>
+	
+	<p>Gruppe:</p>
+	<select id="group">
+		<repeat group="{{ @userGroups }}" key="{{ @groupID }}" value="{{ @groupname }}">
+		<option value="{{ @groupID }}">{{ @groupname }}</option>
+		</repeat>
+	</select>
+	<button onclick="addGroup(); return false;">Mitglieder hinzuf&uuml;gen</button>	
+</form>
+<br/>
+<br/>
+<br/>
+<hr/>
+	
+<button onclick="button('edit');">Speichern</button>
+<button onclick="button('clone');">Klonen</button>
+<button onclick="button('cancel');">Wahl Abbrechen</button>
+<check if="{{ @canStart }}"><button onclick="button('start');">Starten</button></check>
+<button onclick="$('#history').toggle();">Log anzeigen</button>
+
+<check if="{{ @history }}">
+<hr/>
+<div id="history">
+	<h2>&Auml;nderungsverlauf</h2>
+	<table>
+		<thead><tr><td>Datum</td><td>Benutzer</td><td>Aktion</td></tr></thead>
+		<tbody>
+			<repeat group="{{ @history }}" value="{{ @entry }}">
+			<tr>
+				<td>{{ @entry.actionDateFormatted }}</td>
+				<td>{{ @entry.username }}</td>
+				<td>{{ @entry.action }}</td>
+			</tr>
+			</repeat>
+		</tbody>
+	</table>
+</div>

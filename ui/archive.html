@@ -1,0 +1,84 @@
+<script type="text/javascript">
+	// clone
+	function button(action, electionID) {
+		$('#form').attr('action', '{{ @BASE }}/election/' + electionID + '/' + action).submit();
+	}
+</script>
+
+<h1>
+	<span>Archiv beendeter und abgebrochener Wahlen ({{ @numElections }})</span>
+	<strong>Seite {{ @curPage }} (Eintr&auml;ge {{ @firstEntry }} bis {{ @lastEntry }})</strong>
+</h1>
+<check if="{{ @elections }}">
+<true>
+<form method="POST" id="form"></form>
+<table>
+	<thead>
+		<tr>
+			<td>Titel</td>
+			<td>Startete am</td>
+			<td>Beendet am</td>
+			<td>Stimme abgegeben?</td>
+			<td>Ergebnisse ver&ouml;ffentlicht?</td>
+			<td>Abgebrochen am, durch</td>
+			<td></td>
+		</tr>
+	</thead>
+	<tbody>
+		<repeat group="{{ @elections }}" value="{{ @election }}">
+		<tr>
+			<td>
+				<a href="{{ @BASE }}/election/{{ @election.electionID }}">{{ @election.title }}</a>
+			</td>
+			<td>{{ @election.startDateFormatted }}</td>
+			<td>{{ @election.endDateFormatted }}</td>
+			<td>
+			<check if="{{ @election.canVote }}">
+			<true>
+				<check if="{{ @election.hasVoted }}">
+					<true>Ja</true><false>Nein</false>
+				</check>
+			</true>
+			<false>Nicht berechtigt</false>
+			</check>
+			</td>
+			<td><check if="{{ @election.isPublished }}"><true>Ja</true><false>Nein</false></check></td>
+			<td>
+			<check if="{{ @election.isCanceled }}">
+				<true>
+					{{ @election.canceledOn }},
+					<a href="{{ @forum.url }}?page=User&userID={{ @election.canceledBy }}">{{ @election.canceledByName }}</a>
+					<check if="{{ @election.userID==@election.canceledBy }}">(Ersteller)</check>
+				</true>
+				<false>-</false>
+			</check>
+			</td>
+			<td>
+			<check if="{{ @user.isAdmin }}">
+				<button onclick="button('clone', {{ @election.electionID }});">Klonen</button>
+			</check>
+			<check if="{{ @user.isSuperuser }}">
+			<check if="{{ @election.isCanceled }}">
+				<button onclick="button('remove', {{ @election.electionID }});">L&ouml;schen</button>
+			</check>
+			</check>
+			</td>
+		</tr>
+		</repeat>
+	</tbody>
+</table>
+<div id="pagination">
+	<span>
+		<check if="{{ @curPage>1 }}"><a href="{{ @BASE }}/archive">erste Seite</a> | </check>
+		<check if="{{ @prevPage }}"><a href="{{ @BASE }}/archive?page={{ @prevPage }}">vorherige Seite</a></check>
+	</span>
+	<span>
+		<check if="{{ @nextPage }}"><a href="{{ @BASE }}/archive?page={{ @nextPage }}">n&auml;chste Seite</a></check>
+		<check if="{{ @lastPage }}"> | <a href="{{ @BASE }}/archive?page={{ @lastPage }}">letzte Seite</a></check>
+	</span>
+</div>
+</true>
+<false>
+<p>Derzeit befindet sich noch nichts im Archiv.</p>
+</false>
+</check>

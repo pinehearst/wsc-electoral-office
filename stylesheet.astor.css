@@ -1,0 +1,131 @@
+body {
+	font-family:Tahoma,Arial,Helvetica,sans-serif;
+	font-size:13px;
+	background-color:#132236;
+	background-image:url(//vs-astor.org/wcf/images/astor/vsastor_background.png);
+	background-repeat:no-repeat;
+}
+body, td, #nav ul {
+	margin:0;
+}
+a {
+	color:#880000;
+	text-decoration:none;
+}
+a:hover {
+	color:#630402;
+	text-decoration:underline;
+}
+a:hover, button {
+	transition: all 200ms ease-in 0s;
+}
+hr {
+	color:rgba(0, 0, 0, 0.1);
+}
+#footer, #banner {
+	text-align:center;
+}
+#footer, #footer a {
+	color:#ccc;
+}
+#footer {
+ 	height:84px;
+	background-image:url(//vs-astor.org/wcf/images/astor/footer.png);
+	background-repeat:no-repeat;
+	background-position:left bottom;
+	margin-top:20px;
+}
+#nav {
+	background-color:rgba(0, 0, 0, 0.3);
+	border-bottom:1px solid rgba(0, 0, 0, 0.1);
+	box-shadow:0px 3px 7px 0px rgba(0, 0, 0, 0.3);
+}
+#nav, #nav a, thead td, button {
+	color:white;
+}
+#nav li {
+	display:inline-block;
+}
+#main, #nav {
+	padding:10px;
+}
+#main {
+	background-color:#f4f4f4;
+	border:1px solid rgba(0, 0, 0, 0.3);
+	box-shadow:0px 3px 7px 0px rgba(0, 0, 0, 0.3);
+    line-height:20px;
+    max-width:80%;
+    /*max-width:980px;*/
+	margin:0px auto;
+}
+h1 {
+	color:#630402;
+	font-size:22px;
+	text-shadow:#808080 1px 1px 3px;
+}
+h1 strong {
+	font-size:10pt;
+	color:black;
+	float:right;
+}
+h2 {
+	color:#880000;
+	font-size:18px;
+	text-shadow:#A9A9A9 1px 1px 3px;
+}
+h2.success {
+	text-align:center;
+	color:darkgreen;
+}
+table { 
+	border-spacing:1px;
+	border:2px solid #ccc;
+    border-collapse:separate;
+	width:100%;
+}
+thead td {
+	font-weight: bold;
+	font-size:13px;
+	text-align:left;
+	background-color:#6B2129;
+}
+tr {
+	background-image:url(//vs-astor.org/wcf/images/astor/zeile.png);
+	background-repeat:repeat-x;
+	background-position:left bottom;
+}
+tbody tr:hover {
+	background-color:#ccc;
+}
+td {
+	padding:5px;
+}
+textarea {
+	width:250px;
+	height:100px;
+}
+form p, label span, #footer {
+	font-size:8pt;
+}
+button {
+    background:none repeat scroll 0% 0% #AA0000;
+	font-weight:bold;
+    padding:1px 4px 3px;
+    text-shadow:none;
+    border:medium none;
+    border-radius:3px;
+    box-shadow:0px -3px 0px rgba(0, 0, 0, 0.15) inset;
+    margin:2px;
+}
+button:hover, button:focus, button:active {
+	background:none repeat scroll 0% 0% #880000;
+}
+#pagination {
+	margin:5px 10px 20px;
+}
+#pagination > span:first-child {
+	float:left;
+}
+#pagination > span:last-child, #nav ul {
+	float:right;
+}

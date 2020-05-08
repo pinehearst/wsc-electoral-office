@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>{{ @eo.pageTitlePrefix }} - {{ @pageTitle }}</title>
+		<link rel="stylesheet" type="text/css" href="{{ @stylesheet }}"/>
+		<script
+			  src="//code.jquery.com/jquery-1.12.4.min.js"
+			  integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
+			  crossorigin="anonymous"></script>
+	</head>
+	<body>
+		<div id="header">
+			<div id="nav">
+				<span>Willkommen, <a href="{{ @forum.url }}?user/{{ @user.userID }}">{{ @user.username }}</a>!</span>
+				<ul>
+					<li><a href="{{ @forum.url }}">Zum Forum</a></li>
+					<span>|</span>
+					<li><a href="{{ @forum.url }}/forum/?thread/2-u-s-e-r-s-test-thread/">Wahltermine</a></li>
+					<span>|</span>
+					<li><a href="{{ @BASE }}">Mein Wahlamt</a></li>
+					<span>|</span>
+					<li><a href="{{ @BASE }}/overview">&Uuml;bersicht</a></li>
+					<span>|</span>
+					<li><a href="{{ @BASE }}/archive">Archiv</a></li>
+					<check if="{{ @user.isAdmin }}">
+						<span>|</span>
+						<li><a href="{{ @BASE }}/admin">Wahlleitung</a></li>
+					</check>
+				</ul>
+			</div>
+			<div id="banner">
+				<a href="{{ @BASE }}">
+					<img title="{{ @eo.pageTitlePrefix }}" src="{{ @banner }}"/>
+				</a>
+			</div>
+		</div>
+		<div id="main">
+			<include href="{{ @content }}"/>
+		</div>
+		<div id="footer">
+			<span id="version">version {{ @VERSION }} by</span>
+			<strong><a href="//forum.astor.ws/?page=Thread&threadID=16145" target="_blank">pinehearst labs</a></strong>
+			<span>2014-2020</span>
+			<br/>
+			<span>powered by</span>
+			<a href="//fatfreeframework.com" target="_blank">f3</a>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,128 @@
+<script type="text/javascript">
+	// cancel, start, stop, publish
+	function button(action, electionID) {
+		$('form').attr('action', '{{ @BASE }}/election/' + electionID + '/' + action).submit();
+	}
+</script>
+
+<h1>Wahlleitung</h1>
+<h2>Berechtigungslevel</h2>
+<p>
+<check if="{{ @user.isSuperuser }}">
+	<true>Super Admin</true>
+	<false><check if="{{ @user.isAdmin }}">Admin</check></false>
+</check>
+</p>
+
+<h2>Neue Wahl erstellen</h2>
+<form method="POST" action="{{ @BASE }}/election">
+	<label for="title">Titel:</label>
+	<input type="text" name="title" id="title"/>
+	<button>Erstellen</button>
+</form>
+
+<h2>Warten auf Veröffentlichung</h2>
+<check if="{{ @closed }}">
+<true>
+<table>
+	<thead>
+		<tr>
+			<td>Titel</td>
+			<td>Erstellt von</td>
+			<td>Beendet am</td>
+			<td></td>
+		</tr>
+	</thead>
+	<tbody>
+		<repeat group="{{ @closed }}" value="{{ @election }}">
+		<tr>
+			<td><a href="{{ @BASE }}/election/{{ @election.electionID }}">{{ @election.title }}</a></td>
+			<td><a href="{{ @forum.url }}?page=User&userID={{ @election.userID }}">{{ @election.creator }}</a></td>
+			<td>{{ @election.endDateFormatted }}</td>
+			<td>
+				<check if="{{ @election.canEdit }}">
+					<button onclick="button('clone', {{ @election.electionID }});">Klonen</button>
+					<button onclick="button('publish', {{ @election.electionID }});">Ver&ouml;ffentlichen</button>
+				</check>
+			</td>
+		</tr>
+		</repeat>
+	</tbody>
+</table>
+</true>
+<false>
+<p>Derzeit warten keine Wahlen auf die Ver&ouml;ffentlichung ihrer Ergebnisse.</p>
+</false>
+</check>
+
+<h2>Wahlen in Bearbeitung</h2>
+<check if="{{ @inprep }}">
+<true>
+<table>
+	<thead>
+		<tr>
+			<td>Titel</td>
+			<td>Erstellt von</td>
+			<td>Bereit?</td>
+			<td></td>
+		</tr>
+	</thead>
+	<tbody>
+		<repeat group="{{ @inprep }}" value="{{ @election }}">
+		<tr>
+			<td><a href="{{ @BASE }}/election/{{ @election.electionID }}">{{ @election.title }}</a></td>
+			<td><a href="{{ @forum.url }}?page=User&userID={{ @election.userID }}">{{ @election.creator }}</a></td>
+			<td><check if="{{ @election.isReady }}"><true>Ja</true><false>Nein</false></check></td>
+			<td>
+				<check if="{{ @election.canEdit }}">
+					<button onclick="button('clone', {{ @election.electionID }});">Klonen</button>
+					<button onclick="button('cancel', {{ @election.electionID }});">Abbrechen</button>
+					<check if="{{ @election.isReady }}">
+						<button onclick="button('start', {{ @election.electionID }});">Starten</button>
+					</check>
+				</check>
+			</td>
+		</tr>
+		</repeat>
+	</tbody>
+</table>
+</true>
+<false>
+<p>Derzeit befinden sich keine Wahlen in Bearbeitung.</p>
+</false>
+</check>
+
+<h2>Anstehende Wahlen</h2>
+<check if="{{ @upcoming }}">
+<true>
+<table>
+	<thead>
+		<tr>
+			<td>Titel</td>
+			<td>Erstellt von</td>
+			<td>Startet am</td>
+			<td></td>
+		</tr>
+	</thead>
+	<tbody>
+		<repeat group="{{ @upcoming }}" value="{{ @election }}">
+		<tr>
+			<td><a href="{{ @BASE }}/election/{{ @election.electionID }}">{{ @election.title }}</a></td>
+			<td><a href="{{ @forum.url }}?page=User&userID={{ @election.userID }}">{{ @election.creator }}</a></td>
+			<td>{{ @election.startDateFormatted }}</td>
+			<td>
+				<check if="{{ @election.canEdit }}">
+					<button onclick="button('clone', {{ @election.electionID }});">Klonen</button>
+					<button onclick="button('cancel', {{ @election.electionID }});">Abbrechen</button>
+					<button onclick="button('stop', {{ @election.electionID }});">Stoppen</button>
+				</check>
+			</td>
+		</tr>
+		</repeat>
+	</tbody>
+</table>
+</true>
+<false>
+<p>Derzeit stehen keine Wahlen auf dem Plan.</p>
+</false>
+</check>

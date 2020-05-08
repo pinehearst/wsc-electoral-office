@@ -1,0 +1,15 @@
+{
+    "name": "pinehearst/eo",
+    "description": "MN Election Tool",
+    "type": "project",
+    "require": {
+        "bcosca/fatfree-core": "^3.7"
+    },
+    "license": "Apache-2.0",
+    "authors": [
+        {
+            "name": "Pinehearst Labs",
+            "email": "zakharov@pinehearst.net"
+        }
+    ]
+}

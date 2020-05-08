@@ -1,0 +1,90 @@
+<h1>Mein Wahlamt</h1>
+<h2>Laufende Wahlen</h2>
+<check if="{{ @running }}">
+<true>
+<table>
+	<thead>
+		<tr>
+			<td>Titel</td>
+			<td>Endet am</td>
+			<td>Schon gew&auml;hlt?</td>
+		</tr>
+	</thead>
+	<tbody>
+		<repeat group="{{ @running }}" value="{{ @election }}">
+		<tr>
+			<td>
+				<a href="{{ @BASE }}/election/{{ @election.electionID }}">{{ @election.title }}</a>
+			</td>
+			<td>{{ @election.endDateFormatted }}</td>
+			<td>
+			<check if="{{ @election.hasVoted }}">
+				<true>
+					<span>Ja</span>
+				</true>
+				<false>
+					<strong>Nein!</strong>
+				</false>
+			</check>
+			</td>
+		</tr>
+		</repeat>
+	</tbody>
+</table>
+</true>
+<false>
+<p>Derzeit gibt es keine laufenden Wahlen bei denen Sie wahlberechtigt sind.</p>
+</false>
+</check>
+
+<h2>Anstehende Wahlen</h2>
+<check if="{{ @upcoming }}">
+<true>
+<table>
+	<thead>
+		<tr>
+			<td>Titel</td>
+			<td>Startet am</td>
+		</tr>
+	</thead>
+	<tbody>
+		<repeat group="{{ @upcoming }}" value="{{ @election }}">
+		<tr>
+			<td><a href="{{ @BASE }}/election/{{ @election.electionID }}">{{ @election.title }}</a></td>
+			<td>{{ @election.startDateFormatted }}</td>
+		</tr>
+		</repeat>
+	</tbody>
+</table>
+</true>
+<false>
+<p>Derzeit stehen keine Wahlen auf dem Plan bei denen Sie wahlberechtigt wären.</p>
+</false>
+</check>
+
+<h2>K&uuml;rzlich beendete Wahlen</h2>
+<check if="{{ @closed }}">
+<true>
+<table>
+	<thead>
+		<tr>
+			<td>Titel</td>
+			<td>Beendet am</td>
+			<td>Ergebnisse ver&ouml;ffentlicht?</td>
+		</tr>
+	</thead>
+	<tbody>
+		<repeat group="{{ @closed }}" value="{{ @election }}">
+		<tr>
+			<td><a href="{{ @BASE }}/election/{{ @election.electionID }}">{{ @election.title }}</a></td>
+			<td>{{ @election.endDateFormatted }}</td>
+			<td><check if="{{ @election.isPublished }}"><true>Ja</true><false><strong>Nein!</strong></false></check></td>
+		</tr>
+		</repeat>
+	</tbody>
+</table>
+</true>
+<false>
+<p>Keine Wahlen, bei denen Sie wahlberechtigt waren, wurden vor kurzem beendet.</p>
+</false>
+</check>
