@@ -47,7 +47,7 @@
 			<check if="{{ @election.isCanceled }}">
 				<true>
 					{{ @election.canceledOn }},
-					<a href="{{ @forum.url }}?page=User&userID={{ @election.canceledBy }}">{{ @election.canceledByName }}</a>
+					<a href="{{ @wcs.url }}?user/{{ @election.canceledBy }}">{{ @election.canceledByName }}</a>
 					<check if="{{ @election.userID==@election.canceledBy }}">(Ersteller)</check>
 				</true>
 				<false>-</false>
@@ -55,11 +55,11 @@
 			</td>
 			<td>
 			<check if="{{ @user.isAdmin }}">
-				<button onclick="button('clone', {{ @election.electionID }});">Klonen</button>
+				<button onclick="button('clone', '{{ @election.electionID }}');">Klonen</button>
 			</check>
 			<check if="{{ @user.isSuperuser }}">
 			<check if="{{ @election.isCanceled }}">
-				<button onclick="button('remove', {{ @election.electionID }});">L&ouml;schen</button>
+				<button onclick="button('remove', '{{ @election.electionID }}');">L&ouml;schen</button>
 			</check>
 			</check>
 			</td>

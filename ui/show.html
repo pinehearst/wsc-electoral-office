@@ -76,11 +76,9 @@
 		else if(votes == 0) {
 			error = 'no_votes';
 		}
-		/*
 		else if(maxPerChoice > 0 && getMaxVoteCount() > maxPerChoice) {
 			error = 'invalid_max';
 		}
-		*/
 		else if(votes > maxVotes) {
 			error = 'too_many_votes';
 		}

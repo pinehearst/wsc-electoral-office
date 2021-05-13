@@ -37,12 +37,12 @@
 		<repeat group="{{ @closed }}" value="{{ @election }}">
 		<tr>
 			<td><a href="{{ @BASE }}/election/{{ @election.electionID }}">{{ @election.title }}</a></td>
-			<td><a href="{{ @forum.url }}?page=User&userID={{ @election.userID }}">{{ @election.creator }}</a></td>
+			<td><a href="{{ @wcs.url }}?user/{{ @election.userID }}">{{ @election.creator }}</a></td>
 			<td>{{ @election.endDateFormatted }}</td>
 			<td>
 				<check if="{{ @election.canEdit }}">
-					<button onclick="button('clone', {{ @election.electionID }});">Klonen</button>
-					<button onclick="button('publish', {{ @election.electionID }});">Ver&ouml;ffentlichen</button>
+					<button onclick="button('clone', '{{ @election.electionID }}');">Klonen</button>
+					<button onclick="button('publish', '{{ @election.electionID }}');">Ver&ouml;ffentlichen</button>
 				</check>
 			</td>
 		</tr>
@@ -71,14 +71,14 @@
 		<repeat group="{{ @inprep }}" value="{{ @election }}">
 		<tr>
 			<td><a href="{{ @BASE }}/election/{{ @election.electionID }}">{{ @election.title }}</a></td>
-			<td><a href="{{ @forum.url }}?page=User&userID={{ @election.userID }}">{{ @election.creator }}</a></td>
+			<td><a href="{{ @wcs.url }}?user/{{ @election.userID }}">{{ @election.creator }}</a></td>
 			<td><check if="{{ @election.isReady }}"><true>Ja</true><false>Nein</false></check></td>
 			<td>
 				<check if="{{ @election.canEdit }}">
-					<button onclick="button('clone', {{ @election.electionID }});">Klonen</button>
-					<button onclick="button('cancel', {{ @election.electionID }});">Abbrechen</button>
+					<button onclick="button('clone', '{{ @election.electionID }}');">Klonen</button>
+					<button onclick="button('cancel', '{{ @election.electionID }}');">Abbrechen</button>
 					<check if="{{ @election.isReady }}">
-						<button onclick="button('start', {{ @election.electionID }});">Starten</button>
+						<button onclick="button('start', '{{ @election.electionID }}');">Starten</button>
 					</check>
 				</check>
 			</td>
@@ -108,13 +108,13 @@
 		<repeat group="{{ @upcoming }}" value="{{ @election }}">
 		<tr>
 			<td><a href="{{ @BASE }}/election/{{ @election.electionID }}">{{ @election.title }}</a></td>
-			<td><a href="{{ @forum.url }}?page=User&userID={{ @election.userID }}">{{ @election.creator }}</a></td>
+			<td><a href="{{ @wcs.url }}?user/{{ @election.userID }}">{{ @election.creator }}</a></td>
 			<td>{{ @election.startDateFormatted }}</td>
 			<td>
 				<check if="{{ @election.canEdit }}">
-					<button onclick="button('clone', {{ @election.electionID }});">Klonen</button>
-					<button onclick="button('cancel', {{ @election.electionID }});">Abbrechen</button>
-					<button onclick="button('stop', {{ @election.electionID }});">Stoppen</button>
+					<button onclick="button('clone', '{{ @election.electionID }}');">Klonen</button>
+					<button onclick="button('cancel', '{{ @election.electionID }}');">Abbrechen</button>
+					<button onclick="button('stop', '{{ @election.electionID }}');">Stoppen</button>
 				</check>
 			</td>
 		</tr>

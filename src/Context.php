@@ -11,7 +11,7 @@ class Context {
 
 	public function rerouteToForum() {
 		$this->f3->reroute(
-			$this->f3->get('forum.url')
+			$this->f3->get('wcs.url')
 		);
 	}
 
@@ -66,7 +66,7 @@ class Context {
 		$this->f3 =& $f3;
 		$this->tz = new DateTimeZone($this->f3->get('TZ'));
 
-		$this->forum = new Database($this->f3->get('forum.db'));
+		$this->forum = new Database($this->f3->get('wcs.db'));
 		$this->eo = new Database($this->f3->get('eo.db'));
 
 		$this->user = $this->getUserFromSession();
@@ -169,14 +169,14 @@ class Context {
 	}
 
 	public function setElection($electionID, $data) {
-		$query = 'UPDATE {eo}elections SET title = ?, info = ?, startDate = ?, endDate = ?, votes = ? WHERE electionID = ?';
+		$query = 'UPDATE {eo}elections SET title = ?, info = ?, startDate = ?, endDate = ?, votes = ?, votesPerChoice = ? WHERE electionID = ?';
 		$this->eo->doQuery($query,
 			$data['title'],
 			$data['info'],
 			$data['startDate'],
 			$data['endDate'],
 			$data['votes'],
-			//$data['votesPerChoice'],
+			$data['votesPerChoice'],
 			$electionID
 		);
 

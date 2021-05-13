@@ -11,11 +11,9 @@
 	<body>
 		<div id="header">
 			<div id="nav">
-				<span>Willkommen, <a href="{{ @forum.url }}?user/{{ @user.userID }}">{{ @user.username }}</a>!</span>
+				<span>Willkommen, <a href="{{ @wcs.url }}?user/{{ @user.userID }}">{{ @user.username }}</a>!</span>
 				<ul>
-					<li><a href="{{ @forum.url }}">Zum Forum</a></li>
-					<span>|</span>
-					<li><a href="{{ @forum.url }}/forum/?thread/2-u-s-e-r-s-test-thread/">Wahltermine</a></li>
+					<li><a href="{{ @wcs.url }}">Zum Forum</a></li>
 					<span>|</span>
 					<li><a href="{{ @BASE }}">Mein Wahlamt</a></li>
 					<span>|</span>
@@ -39,8 +37,8 @@
 		</div>
 		<div id="footer">
 			<span id="version">version {{ @VERSION }} by</span>
-			<strong><a href="//forum.astor.ws/?page=Thread&threadID=16145" target="_blank">pinehearst labs</a></strong>
-			<span>2014-2020</span>
+			<strong><a href="//us.astor.ws/forum/index.php?thread/16145-pinehearst-labs/" target="_blank">pinehearst labs</a></strong>
+			<span>2014-2021</span>
 			<br/>
 			<span>powered by</span>
 			<a href="//fatfreeframework.com" target="_blank">f3</a>

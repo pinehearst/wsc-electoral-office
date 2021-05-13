@@ -13,6 +13,13 @@
 
 ## Change Log
 
+### Version 1.3.1 (May 2021)
+
+* fix votesPerChoice option
+* upgrade f3 to 3.7.3
+* remove Astor specific header link
+* fix forum/wcs links
+
 ### Version 1.3 (April 2020)
 
 * upgrade f3 to version 3.7

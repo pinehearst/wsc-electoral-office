@@ -65,12 +65,11 @@ class Action extends Context {
 				$broken = true;
 				break;
 			}
-			/*
+
 			if($value > $election['votesPerChoice']) {
 				$broken = true;
 				break;
 			}
-			*/
 
 			$votes[$choice] = $value;
 		}
@@ -217,7 +216,7 @@ class Action extends Context {
 		if($data['votes'] < 1) {
 			$data['votes'] = 1;
 		}
-		/*
+
 		$data['votesPerChoice'] = intval($data['votesPerChoice']);
 
 		if($data['votesPerChoice'] < 0) {
@@ -226,7 +225,7 @@ class Action extends Context {
 		if($data['votesPerChoice'] > $data['votes']) {
 			$data['votesPerChoice'] = $data['votes'];
 		}
-		*/
+
 		$data['startDate'] = $this->date2ts($data['startDate']);
 		$data['endDate'] = $this->date2ts($data['endDate']);
 
@@ -249,13 +248,13 @@ class Action extends Context {
 		}
 
 		$data['choices'] = $choices;
-		/*
+
 		if($data['votesPerChoice'] > 0) {
 			if(count($choices) * $data['votesPerChoice'] < $data['votes']) {
 				$data['votes'] = count($choices) * $data['votesPerChoice'];
 			}
 		}
-		*/
+
 		$missingElectors = [];
 		foreach($data['electors'] as $index => & $elector) {
 			if($elector = trim($elector)) {
@@ -320,14 +319,14 @@ class Action extends Context {
 		$newElectionID = $this->newElection('Klon');
 		$this->addHistory($newElectionID, 'cloned');
 
-		$query = 'UPDATE {eo}elections SET title = ?, info = ?, startDate = ?, endDate = ?, votes = ? WHERE electionID = ?';
+		$query = 'UPDATE {eo}elections SET title = ?, info = ?, startDate = ?, endDate = ?, votes = ?, votesPerChoice = ? WHERE electionID = ?';
 		$this->eo->doQuery($query,
 			'Klon von ' . $election['title'],
 			$election['info'],
 			$election['startDate'],
 			$election['endDate'],
 			$election['votes'],
-			//$election['votesPerChoice'],
+			$election['votesPerChoice'],
 			$newElectionID
 		);
 
