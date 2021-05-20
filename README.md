@@ -10,6 +10,7 @@
 
 * Run all files in the `sql/` folder in your database of choice
 * Copy `config/settings.default.ini` to `config/settings.ini` and set your options accodringly!
+* We're using composer for our dependecy management. Check out https://getcomposer.org/ if you are not familiar.
 
 ## Change Log
 
@@ -35,6 +36,6 @@
 ## Contact
 
 Any questions? Contact us!
-<http://astor.ws/board/?page=Thread&threadID=16145>
+<https://us.astor.ws/forum/?thread/16145>
 or
-<http://astor.ws/board/?form=PMNew&userID=2342>
+<https://us.astor.ws/?conversation-add/&userID=2342>
