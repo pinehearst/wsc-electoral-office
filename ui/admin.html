@@ -8,7 +8,7 @@
 <h1>Wahlleitung</h1>
 <h2>Berechtigungslevel</h2>
 <p>
-<check if="{{ @user.isSuperuser }}">
+<check if="{{ @user.isSuperAdmin }}">
 	<true>Super Admin</true>
 	<false><check if="{{ @user.isAdmin }}">Admin</check></false>
 </check>

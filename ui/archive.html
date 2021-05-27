@@ -57,7 +57,7 @@
 			<check if="{{ @user.isAdmin }}">
 				<button onclick="button('clone', '{{ @election.electionID }}');">Klonen</button>
 			</check>
-			<check if="{{ @user.isSuperuser }}">
+			<check if="{{ @user.isSuperAdmin }}">
 			<check if="{{ @election.isCanceled }}">
 				<button onclick="button('remove', '{{ @election.electionID }}');">L&ouml;schen</button>
 			</check>
