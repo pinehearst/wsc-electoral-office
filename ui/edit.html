@@ -3,14 +3,14 @@
 	function button(action) {
 		$('#edit').attr({action: '{{ @BASE }}/election/{{ @election.electionID }}/' + action}).submit();
 	}
-	
+
 	function addGroup() {
 		$.getJSON('{{ @BASE }}/resource/group/' + $('#group').val() + '/memberNames', {},
 			function(data) {
 				$('#electors').val(data.join("\n") + "\n" + $('#electors').val());
 			});
 	}
-	
+
 	$(document).ready(function() {
 		$('#history').toggle();
 	});
@@ -47,33 +47,39 @@
 	<input type="text" name="votes" id="votes" value="{{ @election.votes }}"/>
 	<label for="votes">Maximale Anzahl an Stimmen pro W&auml;hler</label>
 	<br/>
-	
+	<input type="text" name="votesPerChoice" id="votesPerChoice" value="{{ @election.votesPerChoice }}"/>
+	<label for="votesPerChoice">Maximale Anzahl an Stimmen pro Wahloption</label>
+	<br/>
+	<input type="checkbox" name="needsMaxVotes" id="needsMaxVotes" value="{{ @election.needsMaxVotes }}"/>
+	<label for="needsMaxVotes">W&auml;hler m&uuml;ssen alle verf&uuml;gbaren Stimmen abgeben</label>
+	<br/>
+
 	<h2>Wahloptionen</h2>
 	<p>Eine Option pro Zeile, Dopplungen werden beim Abspeichern entfernt!</p>
 	<p>Jeder Option kann getrennt durch einen Doppelpunkt (:) eine
 		<a href="http://www.w3schools.com/cssref/css_colornames.asp" target="_blank">Farbe</a> zugewiesen werden.</p>
 	<textarea name="choices" id="choices">{{ @choicesString }}</textarea>
-	
+
 	<br/>
 	<br/>
-	
+
 	<h2>W&auml;hler</h2>
 	<p>Ein Wähler pro Zeile, Dopplungen und unbekannte Namen werden beim abspeichern entfernt!</p>
 	<textarea name="electors" id="electors">{{ @electorsString }}</textarea>
-	
+
 	<p>Gruppe:</p>
 	<select id="group">
 		<repeat group="{{ @userGroups }}" key="{{ @groupID }}" value="{{ @groupname }}">
 		<option value="{{ @groupID }}">{{ @groupname }}</option>
 		</repeat>
 	</select>
-	<button onclick="addGroup(); return false;">Mitglieder hinzuf&uuml;gen</button>	
+	<button onclick="addGroup(); return false;">Mitglieder hinzuf&uuml;gen</button>
 </form>
 <br/>
 <br/>
 <br/>
 <hr/>
-	
+
 <button onclick="button('edit');">Speichern</button>
 <button onclick="button('clone');">Klonen</button>
 <button onclick="button('cancel');">Wahl Abbrechen</button>

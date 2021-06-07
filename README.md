@@ -14,6 +14,10 @@
 
 ## Change Log
 
+### Version 1.4 (June 2021)
+
+* added needsMaxVotes option to force usage of maximum available votes
+
 ### Version 1.3.1 (May 2021)
 
 * fix votesPerChoice option

@@ -169,7 +169,7 @@ class Context {
 	}
 
 	public function setElection($electionID, $data) {
-		$query = 'UPDATE {eo}elections SET title = ?, info = ?, startDate = ?, endDate = ?, votes = ?, votesPerChoice = ? WHERE electionID = ?';
+		$query = 'UPDATE {eo}elections SET title = ?, info = ?, startDate = ?, endDate = ?, votes = ?, votesPerChoice = ?, needsMaxVotes = ? WHERE electionID = ?';
 		$this->eo->doQuery($query,
 			$data['title'],
 			$data['info'],
@@ -177,6 +177,7 @@ class Context {
 			$data['endDate'],
 			$data['votes'],
 			$data['votesPerChoice'],
+			$data['needsMaxVotes'],
 			$electionID
 		);
 

@@ -50,12 +50,13 @@ class Action extends Context {
 
 			$choice = intval($choice);
 			$value = intval($value);
-			/*
+
 			if($value < 0) {
-				$broken = true;
-				break;
+				$value = 0;
+				#$broken = true;
+				#break;
 			}
-			*/
+
 			if(!in_array($choice, $choices)) {
 				$broken = true;
 				break;
@@ -80,7 +81,7 @@ class Action extends Context {
 
 		$sumVotes = array_sum(array_values($votes));
 
-		if($sumVotes > $election['votes']) {
+		if($sumVotes > $election['votes'] || ($sumVotes < $election['votes'] && $election['needsMaxVotes' > 0])) {
 			$query = 'UPDATE {eo}electors SET voteDate = ?, votes = NULL WHERE electionID = ? AND userID = ?';
 			$this->eo->doQuery($query, time(), $electionID, $this->user['userID']);
 		}
@@ -194,12 +195,13 @@ class Action extends Context {
 
 		$data = [
 			'choices',
-			'title',
+			'endDate',
 			'info',
+			'needsMaxVotes',
+			'startDate',
+			'title',
 			'votes',
 			'votesPerChoice',
-			'startDate',
-			'endDate'
 		];
 
 		foreach($data as & $d) {
@@ -224,6 +226,15 @@ class Action extends Context {
 		}
 		if($data['votesPerChoice'] > $data['votes']) {
 			$data['votesPerChoice'] = $data['votes'];
+		}
+
+		$data['needsMaxVotes'] = intval($data['needsMaxVotes']);
+
+		if($data['needsMaxVotes'] < 0) {
+			$data['needsMaxVotes'] = 0;
+		}
+		if($data['needsMaxVotes'] > 1) {
+			$data['needsMaxVotes'] = 1;
 		}
 
 		$data['startDate'] = $this->date2ts($data['startDate']);
